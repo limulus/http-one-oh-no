@@ -15,6 +15,12 @@ Why Oh Why HTTP 1.0!?
 Because your server will get HTTP 1.0 requests without a `Host` header, and you should test that. Maybe there are other reasons too.
 
 
+Caveats
+-------
+
+No support for HTTPS. Only aiming to be close to `http.request()` and `http.get()`. This was all done hastily on a Sunday.
+
+
 Installation
 ------------
 
