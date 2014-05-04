@@ -1,0 +1,27 @@
+{
+  "name": "http-one-oh-no",
+  "version": "1.0.0",
+  "description": "Makes HTTP 1.0 requests",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha"
+  },
+  "keywords": [
+    "http",
+    "request",
+    "get"
+  ],
+  "author": "Eric McCarthy <eric@limulus.net>",
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "^1.18.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/limulus/http-one-oh-no.git"
+  },
+    "bugs": {
+    "url": "https://github.com/limulus/http-one-oh-no/issues"
+  },
+  "homepage": "https://github.com/limulus/http-one-oh-no"
+}
