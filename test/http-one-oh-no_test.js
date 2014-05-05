@@ -13,8 +13,9 @@ describe("http-one-oh-no", function () {
 		server = http.createServer(function (req, res) {
 			currentIncomingMessage = req
 			currentResponse = res
+            req.on("data", function () {})
             res.writeHead(200)
-            res.end()
+            res.end("foo")
 		})
 		getPort(function (error, foundPort) {
 			assert.ifError(error)
@@ -46,9 +47,8 @@ describe("http-one-oh-no", function () {
             assert.ok(currentIncomingMessage)
             assert.strictEqual(res.statusCode, 200)
             assert.strictEqual(currentIncomingMessage.headers["host"], undefined)
-            res.on("data", function () {})
             return done()
-        })//.end()
+        }).end()
     })
 
     xit("should send a request with the correct HTTP version identifier", function (done) {

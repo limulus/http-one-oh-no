@@ -2,6 +2,7 @@
 
 var connect = require("net").connect
   , parseUrl = require("url").parse
+  , ClientRequest = require("./src/ClientRequest.js")
 
 var request = module.exports.request = function (options, responseHandler) {
     if (typeof options === "string") {
@@ -14,21 +15,27 @@ var request = module.exports.request = function (options, responseHandler) {
     var path = options.path || "/"
     var headers = options.headers || {}
 
-    var sock = connect(port, host, function () {
+    var sock = new ClientRequest()
+    sock.connect(port, host, function () {
         sock.write(method + " " + path + " HTTP/1.0\r\n")
         Object.keys(headers).forEach(function (name) {
             sock.write(name + ": " + headers[name] + "\r\n")
         })
         sock.write("\r\n")
+        sock.doneWritingHead()
     })
 
     var head = ""
     var headReader = function (data) {
         head += data
-        if (head.match(/\r\n\r\n$/)) {
+        if (head.match(/\r\n\r\n/)) {
             sock.removeListener("data", headReader)
             _headParser(head, sock)
             sock.emit("response", sock)
+            var bodySoFar = head.match(/\r\n\r\n(.+)/)
+            if (bodySoFar) {
+                sock.emit("data", new Buffer(bodySoFar[1]))
+            }
         }
     }
     sock.on("data", headReader)
