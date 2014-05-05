@@ -47,6 +47,12 @@ var request = module.exports.request = function (options, responseHandler) {
     return sock
 }
 
+var get = module.exports.get = function (options, responseHandler) {
+    var req = request(options, responseHandler)
+    req.end()
+    return req
+}
+
 var _headParser = function (head, response) {
     var lines = head.split(/\r\n/)
 

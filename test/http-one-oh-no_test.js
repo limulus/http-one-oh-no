@@ -57,4 +57,11 @@ describe("http-one-oh-no", function () {
             return done()
         }).end()
     })
+
+    it("get function should work similarly", function (done) {
+        httpOhNo.get("http://127.0.0.1:"+port+"/", function (res) {
+            assert.strictEqual(res.statusCode, 200)
+            return done()
+        })
+    })
 })
