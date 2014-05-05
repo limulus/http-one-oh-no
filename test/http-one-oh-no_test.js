@@ -51,7 +51,10 @@ describe("http-one-oh-no", function () {
         }).end()
     })
 
-    xit("should send a request with the correct HTTP version identifier", function (done) {
-        return done()
+    it("should send a request with the correct HTTP version identifier", function (done) {
+        httpOhNo.request(parseUrl("http://127.0.0.1:"+port+"/"), function (res) {
+            assert.strictEqual(currentIncomingMessage.httpVersion, "1.0")
+            return done()
+        }).end()
     })
 })
