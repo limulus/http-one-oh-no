@@ -13,6 +13,7 @@ describe("http-one-oh-no", function () {
 		server = http.createServer(function (req, res) {
 			currentIncomingMessage = req
 			currentResponse = res
+            res.writeHead(200)
             res.end()
 		})
 		getPort(function (error, foundPort) {
@@ -30,12 +31,27 @@ describe("http-one-oh-no", function () {
         })
 	})
 
-    it("should make an HTTP 1.0 request", function (done) {
-        httpOhNo.request(parseUrl("http://127.0.0.1:"+port+"/"), function (res) {
+    it("make sure our test server is working right", function (done) {
+        http.request(parseUrl("http://127.0.0.1:"+port+"/"), function (res) {
             assert.ok(currentIncomingMessage)
-            assert.strictEqual(currentIncomingMessage.headers["host"], undefined)
+            assert.strictEqual(200, res.statusCode)
+            assert.strictEqual(currentIncomingMessage.headers["host"], "127.0.0.1:"+port)
             res.on("data", function () {})
             return done()
         }).end()
+    })
+
+    it("should send a request without a host header", function (done) {
+        httpOhNo.request(parseUrl("http://127.0.0.1:"+port+"/"), function (res) {
+            assert.ok(currentIncomingMessage)
+            assert.strictEqual(res.statusCode, 200)
+            assert.strictEqual(currentIncomingMessage.headers["host"], undefined)
+            res.on("data", function () {})
+            return done()
+        })//.end()
+    })
+
+    xit("should send a request with the correct HTTP version identifier", function (done) {
+        return done()
     })
 })
