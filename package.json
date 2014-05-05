@@ -1,6 +1,9 @@
 {
   "name": "http-one-oh-no",
   "version": "1.0.0",
+  "engines": {
+    "node": ">=0.10"
+  },
   "description": "Make HTTP 1.0 requests",
   "main": "index.js",
   "scripts": {
