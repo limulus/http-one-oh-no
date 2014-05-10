@@ -15,7 +15,7 @@ describe("http-one-oh-no", function () {
 			currentResponse = res
             req.on("data", function () {})
             res.writeHead(200)
-            res.end("foo")
+            res.end("foo: bar\r\n\r\nbaz: quux")
 		})
 		getPort(function (error, foundPort) {
 			assert.ifError(error)
@@ -62,6 +62,18 @@ describe("http-one-oh-no", function () {
         httpOhNo.get("http://127.0.0.1:"+port+"/", function (res) {
             assert.strictEqual(res.statusCode, 200)
             return done()
+        })
+    })
+
+    it("headers should not contain anything from the body of the response", function (done) {
+        httpOhNo.get("http://127.0.0.1:"+port+"/", function (res) {
+            var body = ""
+            res.on("data", function (chunk) { body += chunk })
+            res.on("end", function () {
+                assert.strictEqual(body, "foo: bar\r\n\r\nbaz: quux")
+                assert.strictEqual(res.headers.foo, undefined)
+                done()
+            })
         })
     })
 })

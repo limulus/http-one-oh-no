@@ -27,5 +27,8 @@
   "bugs": {
     "url": "https://github.com/limulus/http-one-oh-no/issues"
   },
-  "homepage": "https://github.com/limulus/http-one-oh-no"
+  "homepage": "https://github.com/limulus/http-one-oh-no",
+  "dependencies": {
+    "streamsearch": "^0.1.2"
+  }
 }

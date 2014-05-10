@@ -2,6 +2,7 @@
 
 var connect = require("net").connect
   , parseUrl = require("url").parse
+  , StreamSearch = require("streamsearch")
   , ClientRequest = require("./src/ClientRequest.js")
 
 var request = module.exports.request = function (options, responseHandler) {
@@ -27,18 +28,31 @@ var request = module.exports.request = function (options, responseHandler) {
 
     var head = ""
     var headReader = function (data) {
-        head += data
-        if (head.match(/\r\n\r\n/)) {
-            sock.removeListener("data", headReader)
-            _headParser(head, sock)
-            sock.emit("response", sock)
-            var bodySoFar = head.match(/\r\n\r\n(.+)/)
-            if (bodySoFar) {
-                sock.emit("data", new Buffer(bodySoFar[1]))
-            }
-        }
+        endOfHeadSearch.push(data)
     }
     sock.on("data", headReader)
+
+    var httpHeadDelimiter = "\r\n\r\n"
+      , endOfHeadSearch = new StreamSearch(httpHeadDelimiter)
+    endOfHeadSearch.on("info", function (isMatch, data, start, end) {
+        if (data) {
+            head += data.toString("ascii", start, end)
+        }
+        if (isMatch) {
+            // Our caller now gets to continue to listen for data events
+            endOfHeadSearch.removeAllListeners("info")
+            sock.removeListener("data", headReader)
+
+            // We've got a response
+            _headParser(head, sock)
+            sock.emit("response", sock)
+
+            // Emit any left over data
+            if (data && data.length > end + httpHeadDelimiter.length) {
+                sock.emit("data", data.slice(end + httpHeadDelimiter.length))
+            }
+        }
+    })
 
     if (responseHandler) {
         sock.on("response", responseHandler)
