@@ -1,4 +1,4 @@
-http-one-oh-no
+http-one-oh-no [![Build Status](https://travis-ci.org/limulus/http-one-oh-no.svg)](https://travis-ci.org/limulus/http-one-oh-no)
 ==============
 
 Make HTTP 1.0 requests
