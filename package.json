@@ -7,7 +7,7 @@
   "description": "Make HTTP 1.0 requests",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha"
+    "test": "mocha"
   },
   "keywords": [
     "http",
